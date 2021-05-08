@@ -31,7 +31,7 @@ module.exports = {
     // Webpack plugin を利用する
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: './index.html',
+      template: './src/index.html',
     }),
   ],
 };

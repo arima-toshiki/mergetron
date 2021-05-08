@@ -2,7 +2,7 @@
   "name": "mergetron",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +17,24 @@
   },
   "homepage": "https://github.com/arima-toshiki/mergetron#readme",
   "devDependencies": {
-    "electron": "^12.0.7"
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.3",
+    "@types/react-redux": "^7.1.16",
+    "@types/redux": "^3.6.0",
+    "electron": "^12.0.7",
+    "eslint": "^7.26.0",
+    "eslint-config-google": "^0.14.0",
+    "prettier": "^2.2.1",
+    "prettier-eslint": "^12.0.0",
+    "ts-loader": "^9.1.2",
+    "typescript": "^4.2.4",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.7.0"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.0"
   }
 }

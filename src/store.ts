@@ -1,15 +1,11 @@
-import {combineReducers, createStore} from 'redux';
-import {IState} from './states/IState';
-import userReducer from './reducers/UserReducer';
+import {configureStore} from '@reduxjs/toolkit';
 
-// 複数の reducer を束ねる
-const combinedReducer = combineReducers<IState>({
-  user: userReducer,
-  // reducer が増えたら足していく
+import rootReducer from './rootReducer';
+
+const store = configureStore({
+  reducer: rootReducer,
 });
 
-// グローバルオブジェクトとして、store を作成する。
-export const store = createStore(combinedReducer);
+export type AppDispatch = typeof store.dispatch;
 
-// import store from './Store' とアクセスできるように default として定義する
 export default store;

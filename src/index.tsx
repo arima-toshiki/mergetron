@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import {Provider} from 'react-redux';
-import UserForm from './components/UserForm';
-import Store from './Store';
+
+import App from './components/application';
+import store from './Store';
 
 const container = document.getElementById('contents');
 ReactDom.render(
-    <Provider store={Store}>
-      <UserForm />
+    <Provider store={store}>
+      <App />
     </Provider>,
     container,
 );

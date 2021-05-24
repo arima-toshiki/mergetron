@@ -1,16 +1,17 @@
-import React from 'react';
+import React, {MouseEventHandler} from 'react';
 
 type Props = {
   name: string;
   value: string;
-  onValueChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick: MouseEventHandler<HTMLButtonElement>;
 };
 
-const DirOrFileSelector: React.FC<Props> = ({name, value, onValueChange}) => {
+const DirOrFileSelector: React.FC<Props> = ({name, value, onClick}) => {
   return (
     <div>
       <label>{name}</label>
-      <input type="file" onChange={onValueChange} value={value} />
+      <input type="text" value={value} />
+      <button onClick={onClick}>選択</button>
     </div>
   );
 };

@@ -9,19 +9,19 @@ const Compared: React.FC = () => {
   const dispatch = useDispatch();
   const {dirOrFileA, dirOrFileB} = useSelector((state: RootState) => state.compared);
 
-  const onChangeValueA = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(selectFileA(e.target.value));
+  const onClickA = useCallback(() => {
+    dispatch(selectFileA());
   }, []);
-  const onChangeValueB = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(selectFileB(e.target.value));
+  const onClickB = useCallback(() => {
+    dispatch(selectFileB());
   }, []);
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const onSubmit = () => {};
 
   return (
     <div className="inner">
-      <DirOrFileSelector name="第１のファイル又はディレクトリ" value={dirOrFileA} onValueChange={onChangeValueA} />
-      <DirOrFileSelector name="第２のファイル又はディレクトリ" value={dirOrFileB} onValueChange={onChangeValueB} />
+      <DirOrFileSelector name="第１のファイル又はディレクトリ" value={dirOrFileA} onClick={onClickA} />
+      <DirOrFileSelector name="第２のファイル又はディレクトリ" value={dirOrFileB} onClick={onClickB} />
       <button onClick={onSubmit}>比較</button>
     </div>
   );

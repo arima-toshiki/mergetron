@@ -13,6 +13,8 @@ const createWindow = (): void => {
       nodeIntegration: false,
       nodeIntegrationInWorker: false,
       contextIsolation: true,
+      worldSafeExecuteJavaScript: true,
+      preload: path.join(__dirname, './core/preLoad.js'),
     },
   });
 

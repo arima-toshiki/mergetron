@@ -1,4 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {Dispatch} from 'react';
+
+import '../core/ICore';
 
 export type State = {
   dirOrFileA: string;
@@ -15,13 +18,35 @@ const slice = createSlice({
   name: 'compared',
   initialState,
   reducers: {
-    selectFileA: (state, action) => {
+    selectFileAStart: (state, action) => {
+      return {
+        ...state,
+      };
+    },
+    selectFileAFailure: (state, action) => {
+      return {
+        ...state,
+        dirOrFileA: '',
+      };
+    },
+    selectFileASuccess: (state, action) => {
       return {
         ...state,
         dirOrFileA: action.payload,
       };
     },
-    selectFileB: (state, action) => {
+    selectFileBStart: (state, action) => {
+      return {
+        ...state,
+      };
+    },
+    selectFileBFailure: (state, action) => {
+      return {
+        ...state,
+        dirOrFileB: '',
+      };
+    },
+    selectFileBSuccess: (state, action) => {
       return {
         ...state,
         dirOrFileB: action.payload,
@@ -34,4 +59,29 @@ const slice = createSlice({
 export default slice;
 
 // export Action Creators
-export const {selectFileA, selectFileB} = slice.actions;
+export const {
+  selectFileAStart,
+  selectFileAFailure,
+  selectFileASuccess,
+  selectFileBStart,
+  selectFileBFailure,
+  selectFileBSuccess,
+} = slice.actions;
+
+export const selectFileA = () => async (dispatch: Dispatch<unknown>): Promise<void> => {
+  dispatch(selectFileAStart(null));
+  const path = await window.core.openFileDialog();
+  if (!path) {
+    dispatch(selectFileAFailure('selectFileA failed!'));
+  }
+  dispatch(selectFileASuccess(path));
+};
+
+export const selectFileB = () => async (dispatch: Dispatch<unknown>): Promise<void> => {
+  dispatch(selectFileBStart(null));
+  const path = await window.core.openFileDialog();
+  if (!path) {
+    dispatch(selectFileBFailure('selectFileA failed!'));
+  }
+  dispatch(selectFileBSuccess(path));
+};

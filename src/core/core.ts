@@ -1,21 +1,13 @@
-import {dialog} from 'electron';
-import fs from 'fs';
+import {ipcRenderer} from 'electron';
 
 import ICore from './ICore';
 
 const openFileDialog = async (): Promise<string | null> => {
-  const {canceled, filePaths} = await dialog.showOpenDialog({
-    properties: ['openFile'],
-    title: 'ファイルを開く',
-  });
-  if (canceled) {
-    return null;
-  }
-  return filePaths[0];
+  return await ipcRenderer.invoke('openFileDialog');
 };
 
 const loadFile = async (path: string): Promise<string> => {
-  return await fs.promises.readFile(path, {encoding: 'utf-8'});
+  return await ipcRenderer.invoke('loadFile', path);
 };
 
 const core: ICore = {

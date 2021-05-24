@@ -2,18 +2,24 @@ import React, {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {RootState} from '../rootReducer';
-import {selectFileA, selectFileB, changeFileA, changeFileB} from '../states/compared';
+import {selectFileA, selectFileB, selectDirA, selectDirB, changeFileA, changeFileB} from '../states/compared';
 import DirOrFileSelector from './dir_or_file_selector';
 
 const Compared: React.FC = () => {
   const dispatch = useDispatch();
   const {dirOrFileA, dirOrFileB} = useSelector((state: RootState) => state.compared);
 
-  const onClickA = useCallback(() => {
+  const onClickFA = useCallback(() => {
     dispatch(selectFileA());
   }, []);
-  const onClickB = useCallback(() => {
+  const onClickFB = useCallback(() => {
     dispatch(selectFileB());
+  }, []);
+  const onClickDA = useCallback(() => {
+    dispatch(selectDirA());
+  }, []);
+  const onClickDB = useCallback(() => {
+    dispatch(selectDirB());
   }, []);
   const onChangeA = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(changeFileA(e.currentTarget.value));
@@ -26,8 +32,20 @@ const Compared: React.FC = () => {
 
   return (
     <div className="inner">
-      <DirOrFileSelector name="第１のファイル又はディレクトリ" value={dirOrFileA} onClick={onClickA} onChange={onChangeA} />
-      <DirOrFileSelector name="第２のファイル又はディレクトリ" value={dirOrFileB} onClick={onClickB} onChange={onChangeB} />
+      <DirOrFileSelector
+        name="第１のファイル又はディレクトリ"
+        value={dirOrFileA}
+        onClickF={onClickFA}
+        onClickD={onClickDA}
+        onChange={onChangeA}
+      />
+      <DirOrFileSelector
+        name="第２のファイル又はディレクトリ"
+        value={dirOrFileB}
+        onClickF={onClickFB}
+        onClickD={onClickDB}
+        onChange={onChangeB}
+      />
       <button onClick={onSubmit}>比較</button>
     </div>
   );

@@ -35,6 +35,23 @@ const slice = createSlice({
         dirOrFileA: action.payload,
       };
     },
+    selectDirAStart: (state, action) => {
+      return {
+        ...state,
+      };
+    },
+    selectDirAFailure: (state, action) => {
+      return {
+        ...state,
+        dirOrFileA: '',
+      };
+    },
+    selectDirASuccess: (state, action) => {
+      return {
+        ...state,
+        dirOrFileA: action.payload,
+      };
+    },
     changeFileA: (state, action) => {
       return {
         ...state,
@@ -58,6 +75,23 @@ const slice = createSlice({
         dirOrFileB: action.payload,
       };
     },
+    selectDirBStart: (state, action) => {
+      return {
+        ...state,
+      };
+    },
+    selectDirBFailure: (state, action) => {
+      return {
+        ...state,
+        dirOrFileB: '',
+      };
+    },
+    selectDirBSuccess: (state, action) => {
+      return {
+        ...state,
+        dirOrFileB: action.payload,
+      };
+    },
     changeFileB: (state, action) => {
       return {
         ...state,
@@ -75,10 +109,16 @@ export const {
   selectFileAStart,
   selectFileAFailure,
   selectFileASuccess,
+  selectDirAStart,
+  selectDirAFailure,
+  selectDirASuccess,
   changeFileA,
   selectFileBStart,
   selectFileBFailure,
   selectFileBSuccess,
+  selectDirBStart,
+  selectDirBFailure,
+  selectDirBSuccess,
   changeFileB,
 } = slice.actions;
 
@@ -91,6 +131,15 @@ export const selectFileA = () => async (dispatch: Dispatch<unknown>): Promise<vo
   dispatch(selectFileASuccess(path));
 };
 
+export const selectDirA = () => async (dispatch: Dispatch<unknown>): Promise<void> => {
+  dispatch(selectDirAStart(null));
+  const path = await window.core.openDirDialog();
+  if (!path) {
+    dispatch(selectDirAFailure('selectDirA failed!'));
+  }
+  dispatch(selectDirASuccess(path));
+};
+
 export const selectFileB = () => async (dispatch: Dispatch<unknown>): Promise<void> => {
   dispatch(selectFileBStart(null));
   const path = await window.core.openFileDialog();
@@ -98,4 +147,13 @@ export const selectFileB = () => async (dispatch: Dispatch<unknown>): Promise<vo
     dispatch(selectFileBFailure('selectFileA failed!'));
   }
   dispatch(selectFileBSuccess(path));
+};
+
+export const selectDirB = () => async (dispatch: Dispatch<unknown>): Promise<void> => {
+  dispatch(selectDirBStart(null));
+  const path = await window.core.openDirDialog();
+  if (!path) {
+    dispatch(selectDirBFailure('selectDirB failed!'));
+  }
+  dispatch(selectDirBSuccess(path));
 };

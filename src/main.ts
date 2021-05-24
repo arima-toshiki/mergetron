@@ -62,6 +62,17 @@ ipcMain.handle('openFileDialog', async (event, data) => {
   return filePaths[0];
 });
 
+ipcMain.handle('openDirDialog', async (event, data) => {
+  const {canceled, filePaths} = await dialog.showOpenDialog({
+    properties: ['openDirectory'],
+    title: 'フォルダを開く',
+  });
+  if (canceled) {
+    return null;
+  }
+  return filePaths[0];
+});
+
 ipcMain.handle('loadFile', async (event, data) => {
   return await fs.promises.readFile(data, {encoding: 'utf-8'});
 });

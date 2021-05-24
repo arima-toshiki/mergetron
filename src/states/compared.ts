@@ -35,6 +35,12 @@ const slice = createSlice({
         dirOrFileA: action.payload,
       };
     },
+    changeFileA: (state, action) => {
+      return {
+        ...state,
+        dirOrFileA: action.payload,
+      };
+    },
     selectFileBStart: (state, action) => {
       return {
         ...state,
@@ -52,6 +58,12 @@ const slice = createSlice({
         dirOrFileB: action.payload,
       };
     },
+    changeFileB: (state, action) => {
+      return {
+        ...state,
+        dirOrFileB: action.payload,
+      };
+    },
   },
 });
 
@@ -63,9 +75,11 @@ export const {
   selectFileAStart,
   selectFileAFailure,
   selectFileASuccess,
+  changeFileA,
   selectFileBStart,
   selectFileBFailure,
   selectFileBSuccess,
+  changeFileB,
 } = slice.actions;
 
 export const selectFileA = () => async (dispatch: Dispatch<unknown>): Promise<void> => {

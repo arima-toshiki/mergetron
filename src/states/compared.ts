@@ -58,6 +58,19 @@ const slice = createSlice({
         dirOrFileA: action.payload,
       };
     },
+    dropA: (state, action) => {
+      const files = action.payload as FileList;
+      if (files.length != 1) {
+        return {
+          ...state,
+        };
+      }
+
+      return {
+        ...state,
+        dirOrFileA: files[0]['path'],
+      };
+    },
     selectFileBStart: (state, action) => {
       return {
         ...state,
@@ -98,6 +111,19 @@ const slice = createSlice({
         dirOrFileB: action.payload,
       };
     },
+    dropB: (state, action) => {
+      const files = action.payload as FileList;
+      if (files.length != 1) {
+        return {
+          ...state,
+        };
+      }
+
+      return {
+        ...state,
+        dirOrFileB: files[0]['path'],
+      };
+    },
   },
 });
 
@@ -113,6 +139,7 @@ export const {
   selectDirAFailure,
   selectDirASuccess,
   changeFileA,
+  dropA,
   selectFileBStart,
   selectFileBFailure,
   selectFileBSuccess,
@@ -120,6 +147,7 @@ export const {
   selectDirBFailure,
   selectDirBSuccess,
   changeFileB,
+  dropB,
 } = slice.actions;
 
 export const selectFileA = () => async (dispatch: Dispatch<unknown>): Promise<void> => {

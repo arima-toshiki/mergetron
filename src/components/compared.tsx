@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {RootState} from '../rootReducer';
-import {selectFileA, selectFileB, selectDirA, selectDirB, changeFileA, changeFileB} from '../states/compared';
+import {selectFileA, selectFileB, selectDirA, selectDirB, changeFileA, changeFileB, dropA, dropB} from '../states/compared';
 import DirOrFileSelector from './dir_or_file_selector';
 
 const Compared: React.FC = () => {
@@ -27,6 +27,13 @@ const Compared: React.FC = () => {
   const onChangeB = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(changeFileB(e.currentTarget.value));
   }, []);
+  const onDropA = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    dispatch(dropA(e.dataTransfer.files));
+  }, []);
+  const onDropB = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    dispatch(dropB(e.dataTransfer.files));
+  }, []);
+
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const onSubmit = () => {};
 
@@ -38,6 +45,7 @@ const Compared: React.FC = () => {
         onClickF={onClickFA}
         onClickD={onClickDA}
         onChange={onChangeA}
+        onDrop={onDropA}
       />
       <DirOrFileSelector
         name="第２のファイル又はディレクトリ"
@@ -45,6 +53,7 @@ const Compared: React.FC = () => {
         onClickF={onClickFB}
         onClickD={onClickDB}
         onChange={onChangeB}
+        onDrop={onDropB}
       />
       <button onClick={onSubmit}>比較</button>
     </div>

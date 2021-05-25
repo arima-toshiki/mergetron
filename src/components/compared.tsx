@@ -28,9 +28,11 @@ const Compared: React.FC = () => {
     dispatch(changeFileB(e.currentTarget.value));
   }, []);
   const onDropA = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
     dispatch(dropA(e.dataTransfer.files));
   }, []);
   const onDropB = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
     dispatch(dropB(e.dataTransfer.files));
   }, []);
 

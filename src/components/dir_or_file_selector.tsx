@@ -10,12 +10,20 @@ type Props = {
 };
 
 const DirOrFileSelector: React.FC<Props> = ({name, value, onClickF, onClickD, onChange, onDrop}) => {
+  const cancelDefaultBehavior = (e: React.DragEvent<HTMLElement>) => {
+    e.preventDefault();
+  };
+
   return (
-    <div onDrop={onDrop}>
+    <div onDrop={onDrop} onDragOver={cancelDefaultBehavior}>
       <label>{name}</label>
       <input type="text" value={value} onChange={onChange} />
-      <button onClick={onClickF}>ファイルを選択</button>
-      <button onClick={onClickD}>フォルダを選択</button>
+      <button onClick={onClickF} onDragOver={cancelDefaultBehavior} onDrop={cancelDefaultBehavior}>
+        ファイルを選択
+      </button>
+      <button onClick={onClickD} onDragOver={cancelDefaultBehavior} onDrop={cancelDefaultBehavior}>
+        フォルダを選択
+      </button>
     </div>
   );
 };

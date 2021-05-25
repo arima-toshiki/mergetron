@@ -26,7 +26,6 @@ const slice = createSlice({
     selectFileAFailure: (state, action) => {
       return {
         ...state,
-        dirOrFileA: '',
       };
     },
     selectFileASuccess: (state, action) => {
@@ -43,7 +42,6 @@ const slice = createSlice({
     selectDirAFailure: (state, action) => {
       return {
         ...state,
-        dirOrFileA: '',
       };
     },
     selectDirASuccess: (state, action) => {
@@ -79,7 +77,6 @@ const slice = createSlice({
     selectFileBFailure: (state, action) => {
       return {
         ...state,
-        dirOrFileB: '',
       };
     },
     selectFileBSuccess: (state, action) => {
@@ -96,7 +93,6 @@ const slice = createSlice({
     selectDirBFailure: (state, action) => {
       return {
         ...state,
-        dirOrFileB: '',
       };
     },
     selectDirBSuccess: (state, action) => {

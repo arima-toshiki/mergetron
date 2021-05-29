@@ -1,49 +1,58 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {Dispatch} from 'react';
 
-import '../core/ICore';
+import {CheckPathResult} from '../core/ICore';
 
 export type State = {
   dirOrFileA: string;
   dirOrFileB: string;
+  canProceed: boolean;
+  description: string;
 };
 
-const initialState = {
+const initialState: State = {
   dirOrFileA: '',
   dirOrFileB: '',
+  canProceed: false,
+  description: '',
 };
+
+type AsyncThunkConfig = {
+  state: State;
+  rejectValue: Error;
+};
+
+export const checkPaths = createAsyncThunk<CheckPathResult, void, AsyncThunkConfig>('checkPaths', async (paths, thunkAPI) => {
+  const state = thunkAPI.getState() as any;
+  const pathA = state.compared.dirOrFileA;
+  const pathB = state.compared.dirOrFileB;
+  console.log(`pathA = ${pathA}; pathB = ${pathB}`);
+  let result: CheckPathResult;
+  try {
+    result = await window.core.checkPaths(pathA, pathB);
+  } catch (e) {
+    thunkAPI.rejectWithValue(e);
+    return;
+  }
+  return result;
+});
 
 // create Slice
 const slice = createSlice({
   name: 'compared',
   initialState,
   reducers: {
-    selectFileAStart: (state, action) => {
-      return {
-        ...state,
-      };
-    },
-    selectFileAFailure: (state, action) => {
-      return {
-        ...state,
-      };
-    },
+    selectFileAStart: (state, action) => state,
+    selectFileAFailure: (state, action) => state,
     selectFileASuccess: (state, action) => {
       return {
         ...state,
         dirOrFileA: action.payload,
+        dirOrFileB: state.dirOrFileB,
       };
     },
-    selectDirAStart: (state, action) => {
-      return {
-        ...state,
-      };
-    },
-    selectDirAFailure: (state, action) => {
-      return {
-        ...state,
-      };
-    },
+    selectDirAStart: (state, action) => state,
+    selectDirAFailure: (state, action) => state,
     selectDirASuccess: (state, action) => {
       return {
         ...state,
@@ -69,32 +78,17 @@ const slice = createSlice({
         dirOrFileA: files[0]['path'],
       };
     },
-    selectFileBStart: (state, action) => {
-      return {
-        ...state,
-      };
-    },
-    selectFileBFailure: (state, action) => {
-      return {
-        ...state,
-      };
-    },
+    selectFileBStart: (state, action) => state,
+    selectFileBFailure: (state, action) => state,
     selectFileBSuccess: (state, action) => {
       return {
         ...state,
         dirOrFileB: action.payload,
+        ...window.core.checkPaths(state.dirOrFileA, action.payload),
       };
     },
-    selectDirBStart: (state, action) => {
-      return {
-        ...state,
-      };
-    },
-    selectDirBFailure: (state, action) => {
-      return {
-        ...state,
-      };
-    },
+    selectDirBStart: (state, action) => state,
+    selectDirBFailure: (state, action) => state,
     selectDirBSuccess: (state, action) => {
       return {
         ...state,
@@ -120,6 +114,25 @@ const slice = createSlice({
         dirOrFileB: files[0]['path'],
       };
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(checkPaths.pending, (state, action) => state);
+    builder.addCase(checkPaths.fulfilled, (state, action) => {
+      const {canProceed, description} = action.payload as CheckPathResult;
+      return {
+        ...state,
+        canProceed,
+        description,
+      };
+    });
+    builder.addCase(checkPaths.rejected, (state, action) => {
+      const e = action.payload as Error;
+      return {
+        ...state,
+        canProceed: false,
+        description: e.message,
+      };
+    });
   },
 });
 

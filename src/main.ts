@@ -2,6 +2,8 @@ import {app, BrowserWindow, ipcMain, dialog} from 'electron';
 import path from 'path';
 import fs from 'fs';
 
+import {CheckPathResult} from './core/ICore';
+
 // セキュアな Electron の構成
 // 参考: https://qiita.com/pochman/items/64b34e9827866664d436
 
@@ -76,3 +78,54 @@ ipcMain.handle('openDirDialog', async (event, data) => {
 ipcMain.handle('loadFile', async (event, data) => {
   return await fs.promises.readFile(data, {encoding: 'utf-8'});
 });
+
+const canProceed = (isDirA: boolean, isFileA: boolean, isDirB: boolean, isFileB: boolean) => {
+  return (isDirA && isDirB) || (isFileA && isFileB);
+};
+
+const cannotCompare = (isDirA: boolean, isFileA: boolean, isDirB: boolean, isFileB: boolean) => {
+  return (isDirA && isFileB) || (isFileA && isDirB);
+};
+
+ipcMain.handle(
+    'checkPaths',
+    async (event, pathA: string, pathB: string): Promise<CheckPathResult> => {
+      console.log('start checkPaths()');
+      try {
+        if (!pathA && !pathB) {
+          return {canProceed: false, description: ''};
+        }
+
+        if (pathA == pathB) {
+          return {canProceed: false, description: '同じファイル又はディレクトリを比較しても意味がありません。'};
+        }
+
+        const pathAStat = await fs.promises.stat(pathA);
+        const pathBStat = await fs.promises.stat(pathB);
+
+        const isDirA = pathAStat.isDirectory();
+        const isFileA = pathAStat.isFile();
+        const isDirB = pathBStat.isDirectory();
+        const isFileB = pathAStat.isFile();
+
+        if (canProceed(isDirA, isFileA, isDirB, isFileB)) {
+          return {canProceed: true, description: ''};
+        } else if (cannotCompare(isDirA, isFileA, isDirB, isFileB)) {
+          return {canProceed: false, description: 'ファイルとディレクトリを比較することはできません。'};
+        } else {
+          let description = '';
+          if (!isFileA && !isDirA) {
+            description += '第１のパスは存在しません。';
+          }
+          if (!isFileB && !isDirB) {
+            description += '第２のパスは存在しません。';
+          }
+          return {canProceed: false, description: description};
+        }
+      } catch (e) {
+        return {canProceed: false, description: ''};
+      } finally {
+        console.log('end checkPaths()');
+      }
+    },
+);

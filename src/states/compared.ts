@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {CheckPathResult} from '../core/ICore';
 import {RootState} from '../rootReducer';
@@ -86,18 +86,16 @@ const slice = createSlice({
   name: 'compared',
   initialState,
   reducers: {
-    changeFileA: (state, action) => {
+    changeFileA: (state: State, action: PayloadAction<string>) => {
       return {
         ...state,
         dirOrFileA: action.payload,
       };
     },
-    dropA: (state, action) => {
-      const files = action.payload as FileList;
+    dropA: (state: State, action: PayloadAction<FileList>) => {
+      const files = action.payload;
       if (files.length != 1) {
-        return {
-          ...state,
-        };
+        return state;
       }
 
       return {
@@ -105,18 +103,16 @@ const slice = createSlice({
         dirOrFileA: files[0]['path'],
       };
     },
-    changeFileB: (state, action) => {
+    changeFileB: (state: State, action: PayloadAction<string>) => {
       return {
         ...state,
         dirOrFileB: action.payload,
       };
     },
-    dropB: (state, action) => {
-      const files = action.payload as FileList;
+    dropB: (state: State, action: PayloadAction<FileList>) => {
+      const files = action.payload;
       if (files.length != 1) {
-        return {
-          ...state,
-        };
+        return state;
       }
 
       return {

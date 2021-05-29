@@ -2,11 +2,11 @@ import {ipcRenderer} from 'electron';
 
 import ICore, {CheckPathResult} from './ICore';
 
-const openFileDialog = async (): Promise<string | null> => {
+const openFileDialog = async (): Promise<string> => {
   return await ipcRenderer.invoke('openFileDialog');
 };
 
-const openDirDialog = async (): Promise<string | null> => {
+const openDirDialog = async (): Promise<string> => {
   return await ipcRenderer.invoke('openDirDialog');
 };
 

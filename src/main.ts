@@ -59,7 +59,7 @@ ipcMain.handle('openFileDialog', async (event, data) => {
     title: 'ファイルを開く',
   });
   if (canceled) {
-    return null;
+    return '';
   }
   return filePaths[0];
 });
@@ -70,7 +70,7 @@ ipcMain.handle('openDirDialog', async (event, data) => {
     title: 'フォルダを開く',
   });
   if (canceled) {
-    return null;
+    return '';
   }
   return filePaths[0];
 });

@@ -4,8 +4,8 @@ export type CheckPathResult = {
 };
 
 export default interface ICore {
-  openFileDialog: () => Promise<string | null>;
-  openDirDialog: () => Promise<string | null>;
+  openFileDialog: () => Promise<string>;
+  openDirDialog: () => Promise<string>;
   loadFile: (path: string) => Promise<string>;
   checkPaths: (pathA: string, pathB: string) => Promise<CheckPathResult>;
   // eslint-disable-next-line semi

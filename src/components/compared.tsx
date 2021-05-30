@@ -12,6 +12,7 @@ import {
   dropA,
   dropB,
   checkPaths,
+  submit,
 } from '../states/compared';
 import DirOrFileSelector from './dir_or_file_selector';
 
@@ -53,9 +54,9 @@ const Compared: React.FC = () => {
     dispatch(dropB(e.dataTransfer.files));
     dispatch(checkPaths());
   }, []);
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const onSubmit = () => {};
+  const onSubmit = () => {
+    dispatch(submit());
+  };
 
   return (
     <div className="inner">

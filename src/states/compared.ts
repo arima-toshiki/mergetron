@@ -8,6 +8,7 @@ export type State = {
   dirOrFileB: string;
   canProceed: boolean;
   description: string;
+  submitted: boolean;
 };
 
 const initialState: State = {
@@ -15,6 +16,7 @@ const initialState: State = {
   dirOrFileB: '',
   canProceed: false,
   description: '',
+  submitted: false,
 };
 
 type AsyncThunkConfig = {
@@ -120,9 +122,16 @@ const slice = createSlice({
         dirOrFileB: files[0]['path'],
       };
     },
+    submit: (state: State) => {
+      state.submitted = true;
+    },
+    back: (state: State) => {
+      console.log('back button clicked.');
+      state.submitted = false;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(selectFileA.pending, (state, action) => state);
+    builder.addCase(selectFileA.pending, (state) => state);
     builder.addCase(selectFileA.fulfilled, (state, action) => {
       return {
         ...state,
@@ -138,7 +147,7 @@ const slice = createSlice({
       };
     });
 
-    builder.addCase(selectDirA.pending, (state, action) => state);
+    builder.addCase(selectDirA.pending, (state) => state);
     builder.addCase(selectDirA.fulfilled, (state, action) => {
       return {
         ...state,
@@ -154,7 +163,7 @@ const slice = createSlice({
       };
     });
 
-    builder.addCase(selectFileB.pending, (state, action) => state);
+    builder.addCase(selectFileB.pending, (state) => state);
     builder.addCase(selectFileB.fulfilled, (state, action) => {
       return {
         ...state,
@@ -170,7 +179,7 @@ const slice = createSlice({
       };
     });
 
-    builder.addCase(selectDirB.pending, (state, action) => state);
+    builder.addCase(selectDirB.pending, (state) => state);
     builder.addCase(selectDirB.fulfilled, (state, action) => {
       return {
         ...state,
@@ -186,7 +195,7 @@ const slice = createSlice({
       };
     });
 
-    builder.addCase(checkPaths.pending, (state, action) => state);
+    builder.addCase(checkPaths.pending, (state) => state);
     builder.addCase(checkPaths.fulfilled, (state, action) => {
       const {canProceed, description} = action.payload as CheckPathResult;
       return {
@@ -210,4 +219,4 @@ const slice = createSlice({
 export default slice;
 
 // export Action Creators
-export const {changeFileA, dropA, changeFileB, dropB} = slice.actions;
+export const {changeFileA, dropA, changeFileB, dropB, submit, back} = slice.actions;

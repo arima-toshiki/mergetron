@@ -79,16 +79,9 @@ ipcMain.handle('loadFile', async (event, data) => {
   return await fs.promises.readFile(data, {encoding: 'utf-8'});
 });
 
-const canProceed = (isDirA: boolean, isFileA: boolean, isDirB: boolean, isFileB: boolean) => {
-  return (isDirA && isDirB) || (isFileA && isFileB);
-};
-
-const cannotCompare = (isDirA: boolean, isFileA: boolean, isDirB: boolean, isFileB: boolean) => {
-  return (isDirA && isFileB) || (isFileA && isDirB);
-};
-
 ipcMain.handle(
     'checkPaths',
+    // eslint-disable-next-line complexity
     async (event, pathA: string, pathB: string): Promise<CheckPathResult> => {
       console.log('start checkPaths()');
       try {
@@ -108,9 +101,9 @@ ipcMain.handle(
         const isDirB = pathBStat.isDirectory();
         const isFileB = pathAStat.isFile();
 
-        if (canProceed(isDirA, isFileA, isDirB, isFileB)) {
+        if ((isDirA && isDirB) || (isFileA && isFileB)) {
           return {canProceed: true, description: ''};
-        } else if (cannotCompare(isDirA, isFileA, isDirB, isFileB)) {
+        } else if ((isDirA && isFileB) || (isFileA && isDirB)) {
           return {canProceed: false, description: 'ファイルとディレクトリを比較することはできません。'};
         } else {
           let description = '';
@@ -123,7 +116,7 @@ ipcMain.handle(
           return {canProceed: false, description: description};
         }
       } catch (e) {
-        return {canProceed: false, description: ''};
+        return {canProceed: false, description: e.message};
       } finally {
         console.log('end checkPaths()');
       }

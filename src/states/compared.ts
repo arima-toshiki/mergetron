@@ -72,7 +72,7 @@ export const checkPaths = createAsyncThunk<CheckPathResult, void, AsyncThunkConf
   const state = thunkAPI.getState();
   const pathA = state.compared.dirOrFileA;
   const pathB = state.compared.dirOrFileB;
-  console.log(`pathA = ${pathA}; pathB = ${pathB}`);
+  console.log(`pathA = '${pathA}'; pathB = '${pathB}'`);
   let result: CheckPathResult;
   try {
     result = await window.core.checkPaths(pathA, pathB);

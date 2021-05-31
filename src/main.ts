@@ -85,7 +85,7 @@ ipcMain.handle(
     async (event, pathA: string, pathB: string): Promise<CheckPathResult> => {
       console.log('start checkPaths()');
       try {
-        if (!pathA && !pathB) {
+        if (!pathA || !pathB) {
           return {canProceed: false, description: ''};
         }
 
@@ -93,27 +93,43 @@ ipcMain.handle(
           return {canProceed: false, description: '同じファイル又はディレクトリを比較しても意味がありません。'};
         }
 
-        const pathAStat = await fs.promises.stat(pathA);
-        const pathBStat = await fs.promises.stat(pathB);
+        let description = '';
+        let isDirA = null;
+        let isFileA = null;
+        try {
+          const pathAStat = await fs.promises.stat(pathA);
+          isDirA = pathAStat.isDirectory();
+          isFileA = pathAStat.isFile();
+        } catch (e) {
+          if (e.code === 'ENOENT') {
+            description += '第１のパスは存在しません。';
+          } else {
+            throw e;
+          }
+        }
 
-        const isDirA = pathAStat.isDirectory();
-        const isFileA = pathAStat.isFile();
-        const isDirB = pathBStat.isDirectory();
-        const isFileB = pathAStat.isFile();
+        let isDirB = null;
+        let isFileB = null;
+        try {
+          const pathBStat = await fs.promises.stat(pathB);
+          isDirB = pathBStat.isDirectory();
+          isFileB = pathBStat.isFile();
+        } catch (e) {
+          if (e.code === 'ENOENT') {
+            description += '第２のパスは存在しません。';
+          } else {
+            throw e;
+          }
+        }
+
+        if (description !== '') {
+          return {canProceed: false, description};
+        }
 
         if ((isDirA && isDirB) || (isFileA && isFileB)) {
           return {canProceed: true, description: ''};
-        } else if ((isDirA && isFileB) || (isFileA && isDirB)) {
-          return {canProceed: false, description: 'ファイルとディレクトリを比較することはできません。'};
         } else {
-          let description = '';
-          if (!isFileA && !isDirA) {
-            description += '第１のパスは存在しません。';
-          }
-          if (!isFileB && !isDirB) {
-            description += '第２のパスは存在しません。';
-          }
-          return {canProceed: false, description: description};
+          return {canProceed: false, description: 'ファイルとディレクトリを比較することはできません。'};
         }
       } catch (e) {
         return {canProceed: false, description: e.message};

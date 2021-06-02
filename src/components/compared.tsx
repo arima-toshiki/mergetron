@@ -22,19 +22,15 @@ const Compared: React.FC = () => {
 
   const onClickFA = useCallback(() => {
     dispatch(selectFileA());
-    dispatch(checkPaths());
   }, []);
   const onClickFB = useCallback(() => {
     dispatch(selectFileB());
-    dispatch(checkPaths());
   }, []);
   const onClickDA = useCallback(() => {
     dispatch(selectDirA());
-    dispatch(checkPaths());
   }, []);
   const onClickDB = useCallback(() => {
     dispatch(selectDirB());
-    dispatch(checkPaths());
   }, []);
   const onChangeA = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(changeFileA(e.currentTarget.value));

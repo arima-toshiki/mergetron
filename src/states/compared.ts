@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, Dispatch, PayloadAction} from '@reduxjs/toolkit';
 
 import {CheckPathResult} from '../core/ICore';
 import {RootState} from '../rootReducer';
@@ -22,12 +22,14 @@ const initialState: State = {
 type AsyncThunkConfig = {
   state: RootState;
   rejectValue: Error;
+  dispatch: Dispatch<any>;
 };
 
 export const selectFileA = createAsyncThunk<string, void, AsyncThunkConfig>('selectFileA', async (dummy, thunkAPI) => {
   let result: string;
   try {
     result = await window.core.openFileDialog();
+    thunkAPI.dispatch(checkPaths());
   } catch (e) {
     thunkAPI.rejectWithValue(e);
     return '';
@@ -39,6 +41,7 @@ export const selectDirA = createAsyncThunk<string, void, AsyncThunkConfig>('sele
   let result: string;
   try {
     result = await window.core.openDirDialog();
+    thunkAPI.dispatch(checkPaths());
   } catch (e) {
     thunkAPI.rejectWithValue(e);
     return '';
@@ -50,6 +53,7 @@ export const selectFileB = createAsyncThunk<string, void, AsyncThunkConfig>('sel
   let result: string;
   try {
     result = await window.core.openFileDialog();
+    thunkAPI.dispatch(checkPaths());
   } catch (e) {
     thunkAPI.rejectWithValue(e);
     return '';
@@ -61,6 +65,7 @@ export const selectDirB = createAsyncThunk<string, void, AsyncThunkConfig>('sele
   let result: string;
   try {
     result = await window.core.openDirDialog();
+    thunkAPI.dispatch(checkPaths());
   } catch (e) {
     thunkAPI.rejectWithValue(e);
     return '';
@@ -72,7 +77,6 @@ export const checkPaths = createAsyncThunk<CheckPathResult, void, AsyncThunkConf
   const state = thunkAPI.getState();
   const pathA = state.compared.dirOrFileA;
   const pathB = state.compared.dirOrFileB;
-  console.log(`pathA = '${pathA}'; pathB = '${pathB}'`);
   let result: CheckPathResult;
   try {
     result = await window.core.checkPaths(pathA, pathB);

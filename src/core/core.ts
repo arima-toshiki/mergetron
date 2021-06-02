@@ -15,6 +15,7 @@ const loadFile = async (path: string): Promise<string> => {
 };
 
 const checkPaths = async (pathA: string, pathB: string): Promise<CheckPathResult> => {
+  console.log(`pathA = '${pathA}'; pathB = '${pathB}'`);
   return await ipcRenderer.invoke('checkPaths', pathA, pathB);
 };
 

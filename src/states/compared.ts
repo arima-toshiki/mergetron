@@ -26,51 +26,55 @@ type AsyncThunkConfig = {
 };
 
 export const selectFileA = createAsyncThunk<string, void, AsyncThunkConfig>('selectFileA', async (dummy, thunkAPI) => {
-  let result: string;
   try {
-    result = await window.core.openFileDialog();
-    thunkAPI.dispatch(checkPaths());
+    return await window.core.openFileDialog();
   } catch (e) {
     thunkAPI.rejectWithValue(e);
     return '';
+  } finally {
+    setTimeout(() => {
+      thunkAPI.dispatch(checkPaths());
+    }, 0);
   }
-  return result;
 });
 
 export const selectDirA = createAsyncThunk<string, void, AsyncThunkConfig>('selectDirA', async (dummy, thunkAPI) => {
-  let result: string;
   try {
-    result = await window.core.openDirDialog();
-    thunkAPI.dispatch(checkPaths());
+    return await window.core.openDirDialog();
   } catch (e) {
     thunkAPI.rejectWithValue(e);
     return '';
+  } finally {
+    setTimeout(() => {
+      thunkAPI.dispatch(checkPaths());
+    }, 0);
   }
-  return result;
 });
 
 export const selectFileB = createAsyncThunk<string, void, AsyncThunkConfig>('selectFileB', async (dummy, thunkAPI) => {
-  let result: string;
   try {
-    result = await window.core.openFileDialog();
-    thunkAPI.dispatch(checkPaths());
+    return await window.core.openFileDialog();
   } catch (e) {
     thunkAPI.rejectWithValue(e);
     return '';
+  } finally {
+    setTimeout(() => {
+      thunkAPI.dispatch(checkPaths());
+    }, 0);
   }
-  return result;
 });
 
 export const selectDirB = createAsyncThunk<string, void, AsyncThunkConfig>('selectDirB', async (dummy, thunkAPI) => {
-  let result: string;
   try {
-    result = await window.core.openDirDialog();
-    thunkAPI.dispatch(checkPaths());
+    return await window.core.openDirDialog();
   } catch (e) {
     thunkAPI.rejectWithValue(e);
     return '';
+  } finally {
+    setTimeout(() => {
+      thunkAPI.dispatch(checkPaths());
+    }, 0);
   }
-  return result;
 });
 
 export const checkPaths = createAsyncThunk<CheckPathResult, void, AsyncThunkConfig>('checkPaths', async (dummy, thunkAPI) => {

@@ -1,9 +1,11 @@
 import {combineReducers} from '@reduxjs/toolkit';
 
-import slice from './states/compared';
+import comparedSlice from './states/compared';
+import diffApplicationSlice from './states/diff_application';
 
 const reducer = combineReducers({
-  compared: slice.reducer,
+  compared: comparedSlice.reducer,
+  diffApplication: diffApplicationSlice.reducer,
 });
 
 export type RootState = ReturnType<typeof reducer>;

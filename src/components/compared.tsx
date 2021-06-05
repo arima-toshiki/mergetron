@@ -14,6 +14,7 @@ import {
   checkPaths,
   submit,
 } from '../states/compared';
+import {initialize, loadFiles} from '../states/diff_application';
 import DirOrFileSelector from './dir_or_file_selector';
 
 const Compared: React.FC = () => {
@@ -51,7 +52,11 @@ const Compared: React.FC = () => {
     dispatch(checkPaths());
   }, []);
   const onSubmit = () => {
+    dispatch(initialize({pathA: dirOrFileA, pathB: dirOrFileB}));
     dispatch(submit());
+    setTimeout(() => {
+      dispatch(loadFiles());
+    }, 0);
   };
 
   return (

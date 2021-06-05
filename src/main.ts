@@ -1,8 +1,9 @@
 import {app, BrowserWindow, ipcMain, dialog} from 'electron';
 import path from 'path';
 import fs from 'fs';
+import Encoding from 'encoding-japanese';
 
-import {CheckPathResult} from './core/ICore';
+import {CheckPathResult, LoadFileResult} from './core/ICore';
 
 // セキュアな Electron の構成
 // 参考: https://qiita.com/pochman/items/64b34e9827866664d436
@@ -75,9 +76,22 @@ ipcMain.handle('openDirDialog', async (event, data) => {
   return filePaths[0];
 });
 
-ipcMain.handle('loadFile', async (event, data) => {
-  return await fs.promises.readFile(data, {encoding: 'utf-8'});
-});
+ipcMain.handle(
+    'loadFile',
+    async (event, data): Promise<LoadFileResult> => {
+      const buffer = await fs.promises.readFile(data);
+      const encode = Encoding.detect(buffer);
+      const text = Encoding.convert(buffer, {
+        from: encode as Encoding.Encoding,
+        to: 'UNICODE',
+        type: 'string',
+      });
+      return {
+        encode: encode as Encoding.Encoding,
+        content: text,
+      };
+    },
+);
 
 ipcMain.handle(
     'checkPaths',

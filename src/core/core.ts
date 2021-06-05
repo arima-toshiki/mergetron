@@ -1,6 +1,6 @@
 import {ipcRenderer} from 'electron';
 
-import ICore, {CheckPathResult} from './ICore';
+import ICore, {CheckPathResult, LoadFileResult} from './ICore';
 
 const openFileDialog = async (): Promise<string> => {
   return await ipcRenderer.invoke('openFileDialog');
@@ -10,7 +10,7 @@ const openDirDialog = async (): Promise<string> => {
   return await ipcRenderer.invoke('openDirDialog');
 };
 
-const loadFile = async (path: string): Promise<string> => {
+const loadFile = async (path: string): Promise<LoadFileResult> => {
   return await ipcRenderer.invoke('loadFile', path);
 };
 

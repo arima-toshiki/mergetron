@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/arima-toshiki/mergetron#readme",
   "devDependencies": {
+    "@types/encoding-japanese": "^1.0.17",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.3",
     "@types/react-redux": "^7.1.16",
@@ -41,9 +42,13 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
+    "diff": "^5.0.0",
+    "diff2html": "^3.4.5",
+    "encoding-japanese": "^1.0.30",
     "eslint-loader": "^4.0.2",
     "html-webpack-plugin": "^5.3.1",
     "react": "^17.0.2",
+    "react-ace": "^9.4.0",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0"

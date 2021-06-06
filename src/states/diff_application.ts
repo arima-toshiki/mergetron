@@ -1,4 +1,6 @@
 import {createAsyncThunk, createSlice, Dispatch, PayloadAction} from '@reduxjs/toolkit';
+import {createPatch} from 'diff';
+import * as Diff2html from 'diff2html';
 
 import '../core/ICore';
 import {LoadFileResult} from '../core/ICore';
@@ -13,6 +15,8 @@ export type DiffApplicationState = {
   encodeB: Encoding.Encoding;
   contentB: string;
   loadingB: boolean;
+  rawDiff: string;
+  htmlDiff: string;
   errorMessage: string;
 };
 
@@ -25,6 +29,8 @@ const initialState: DiffApplicationState = {
   encodeB: 'BINARY',
   contentB: '',
   loadingB: false,
+  rawDiff: '',
+  htmlDiff: '',
   errorMessage: '',
 };
 
@@ -40,6 +46,11 @@ export const loadFiles = createAsyncThunk<{fileInfoA: LoadFileResult; fileInfoB:
       const state = thunkAPI.getState().diffApplication;
       const fileInfoA = await window.core.loadFile(state.pathA);
       const fileInfoB = await window.core.loadFile(state.pathB);
+
+      setTimeout(() => {
+        thunkAPI.dispatch(createDiff({contentA: fileInfoA.content, contentB: fileInfoB.content}));
+      }, 0);
+
       return {fileInfoA, fileInfoB};
     },
 );
@@ -52,6 +63,12 @@ const slice = createSlice({
     initialize: (state: DiffApplicationState, action: PayloadAction<{pathA: string; pathB: string}>) => {
       state.pathA = action.payload.pathA;
       state.pathB = action.payload.pathB;
+    },
+    createDiff: (state: DiffApplicationState, action: PayloadAction<{contentA: string; contentB: string}>) => {
+      state.rawDiff = createPatch('', action.payload.contentA, action.payload.contentB, state.pathA, state.pathB);
+
+      // diff2html
+      state.htmlDiff = Diff2html.html(state.rawDiff, {outputFormat: 'side-by-side'});
     },
   },
   extraReducers: (builder) => {
@@ -75,4 +92,4 @@ const slice = createSlice({
 
 export default slice;
 
-export const {initialize} = slice.actions;
+export const {initialize, createDiff} = slice.actions;
